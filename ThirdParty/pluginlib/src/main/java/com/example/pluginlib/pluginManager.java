@@ -1,10 +1,13 @@
 package com.example.pluginlib;
 
+/*创建插件APK 的 dexCalssLoader  Resource*/
+
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.widget.Toast;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -28,16 +31,22 @@ public class pluginManager {
     public pluginApk getMpluginApk(){
         return mpluginApk;
     }
+
     //加载插件Apk文件
     public void loadApk(String apkpath){
         PackageInfo packageInfo = mContex.getPackageManager().getPackageArchiveInfo(apkpath,
-                PackageManager.GET_ACTIVITIES|PackageManager.GET_SERVICES);
+                PackageManager.GET_ACTIVITIES|PackageManager.GET_SERVICES); //获取到插件apk的PackageInfo
         if(packageInfo == null)
             return;
         DexClassLoader classLoader = createDexClassLoader(apkpath);
         AssetManager am = createAssetManager(apkpath);
         Resources resources = createResources(am);
         mpluginApk = new pluginApk(classLoader,resources,packageInfo,am);
+    }
+
+    private DexClassLoader createDexClassLoader(String apkpath) {
+        File file = mContex.getDir("dex",Context.MODE_PRIVATE);
+        return new DexClassLoader(apkpath,file.getAbsolutePath(),null,mContex.getClassLoader());
     }
 
     private Resources createResources(AssetManager am) {
@@ -55,11 +64,6 @@ public class pluginManager {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private DexClassLoader createDexClassLoader(String apkpath) {
-        File file = mContex.getDir("dex",Context.MODE_PRIVATE);
-        return new DexClassLoader(apkpath,file.getAbsolutePath(),null,mContex.getClassLoader());
     }
 
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
@@ -16,11 +16,13 @@
             android:id="@+id/load"/>
 
         <TextView
+            android:layout_marginTop="40dp"
+            android:layout_below="@+id/load"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="跳转到加载的APk!"
             android:id="@+id/start"/>
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </android.support.constraint.ConstraintLayout>
